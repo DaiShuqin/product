@@ -7,34 +7,34 @@
       <div class="login">
         <div class="log_img"><img :src="url+'l_img.png'" width="611" height="425" /></div>
         <div class="log_c">
-          <form>
-            <table border="0" style="width:370px; font-size:14px; margin-top:10px;" cellspacing="0" cellpadding="0">
+          <el-form :model="queryParams"　:rules="rules" ref="queryParams">
+            <table border="0" style="width:450px; font-size:14px; margin-top:10px;" cellspacing="0" cellpadding="0">
               <tr height="50" valign="top">
-                <td width="55">&nbsp;</td>
+                <td width="60">&nbsp;</td>
                 <td>
                   <span class="fl" style="font-size:24px;">登录</span>
                   <span class="fr">还没有商城账号，<a @click="register" style="color:#ff4e00;">立即注册</a></span>
                 </td>
               </tr>
-              <tr height="70">
-                <td>用户名或手机号</td>
-                <td><input type="text" name="loginName" id="loginName" value="" class="l_user" /></td>
+              <tr height="70" style="width: 200px">
+                <td >用户名或手机号</td>
+                <td><input v-model="queryParams.mm" type="text" name="loginName" id="loginName" value="" class="l_user" /></td>
               </tr>
               <tr height="70">
                 <td>密&nbsp; &nbsp; 码</td>
-                <td><input type="password" name="password" id="password" value="" class="l_pwd" /></td>
+                <td><input v-model="queryParams.password" type="password" name="password" id="password" value="" class="l_pwd" /></td>
               </tr>
-              <tr height="70">
-                <td><el-button>获取验证码</el-button></td>
-                <td><input type="vcode" name="vcode" id="vcode" value="" class="l_pwd" /></td>
 
-              </tr>
               <tr height="60">
                 <td>&nbsp;</td>
-                <td><input type="button" value="登录" class="log_btn" onclick="login();" /></td>
+                <td><input type="button" value="登录" class="log_btn" @click="loginuser" /></td>
               </tr>
+
             </table>
-          </form>
+
+              <a href="#">忘记密码</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">忘记用户名</a>
+          </el-form>
         </div>
       </div>
     </div>
@@ -51,12 +51,25 @@
 </template>
 
 <script>
-
+  import {login} from "@/api/product/login";
   export default {
     name: "login",
     data() {
       return {
-        url: "http://127.0.0.1:89/productimg/"
+        url: "http://127.0.0.1:89/productimg/",
+        queryParams: {
+          mm:undefined,
+          userName:undefined,
+          password:undefined
+        },
+        rules: {
+          userName: [
+            { required: true, message: '账号不能为空', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '密码不能为空', trigger: 'blur' }
+          ]
+        }
       }
     },
     methods:{
@@ -68,6 +81,27 @@
       },
       register(){
         this.$router.push({path:"/register"});
+      },
+      loginuser() {
+        this.queryParams.userName = this.queryParams.mm;
+        this.queryParams.phoneno = this.queryParams.mm;
+        if(this.queryParams.userName==undefined||this.queryParams.userName==""){
+          this.$message("用户名不能为空");
+          return false;
+        }
+        if(this.queryParams.password==undefined||this.queryParams.password==""){
+          this.$message('密码不能为空');
+          return false;
+        }
+        login(this.queryParams).then(response => {
+              if (response.data.retCode=="1000") {
+                alert(response.data.retCode)
+                this.$router.push({path: "/index"})
+              } else {
+                alert(response.data.retMsg)
+              }
+        })
+
       }
     }
   };
@@ -2596,8 +2630,8 @@
   }
 
   .log_c {
-    width: 455px;
-    height: 330px;
+    width: 550px;
+    height: 300px;
     overflow: hidden;
     background-color: #FFF;
     float: right;

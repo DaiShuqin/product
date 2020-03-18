@@ -7,7 +7,7 @@
       <div class="regist">
         <div class="log_img"><img :src="url+'l_img.png'" width="611" height="425"/></div>
         <div class="reg_c">
-          <form id="register">
+          <el-form id="register" :model="queryParams" :rules="rules" ref="queryParams">
             <table border="0" style="width:420px; font-size:14px; margin-top:20px;" cellspacing="0" cellpadding="0">
               <tr height="50" valign="top">
                 <td width="95">&nbsp;</td>
@@ -18,31 +18,35 @@
               </tr>
               <tr height="70">
                 <td align="right"><font color="#ff4e00">*</font>登录用户名 &nbsp;</td>
-                <td><input type="text" value="" name="loginName" class="l_user"/></td>
+                <td><input v-model="queryParams.userName" type="text" value="" name="loginName" class="l_user"/></td>
               </tr>
               <tr height="70">
                 <td align="right"><font color="#ff4e00">*</font>&nbsp;密码 &nbsp;</td>
-                <td><input type="password" value="" name="password" class="l_pwd"/></td>
+                <td><input v-model="queryParams.password" type="password" value="" name="password" class="l_pwd"/></td>
               </tr>
               <tr height="70">
                 <td align="right"><font color="#ff4e00">*</font>&nbsp;确认密码 &nbsp;</td>
-                <td><input type="password" value="" name="confirmPassword" class="l_pwd"/></td>
+                <td><input v-model="queryParams.password1" type="password" value="" name="confirmPassword" class="l_pwd"/></td>
               </tr>
 
               <tr height="70">
                 <td align="right">&nbsp;手机 &nbsp;</td>
-                <td><input type="text" value="" name="mobile" class="l_tel"/></td>
+                <td><input v-model="queryParams.phoneno" type="text" value="" name="mobile" class="l_tel"/></td>
               </tr>
               <tr height="70">
-                <td align="right"><el-button>&nbsp;发送验证码 &nbsp;</el-button></td>
-                <td><input type="text" value="" name="mobile" class="l_tel"/></td>
+                <td align="right">
+                  <el-button @click="TranvCode" icon="el-icon-message" v-if="this.getCode">&nbsp;发送验证码 &nbsp;</el-button>
+                  <el-button v-else disabled="disabled">{{this.countTime}}S后重试</el-button></td>
+                <td>
+                  <input type="text" value="" name="mobile" class="l_tel1"/>
+                </td>
               </tr>
               <tr height="89">
                 <td>&nbsp;</td>
-                <td><input type="button" value="立即注册" class="log_btn" onclick="register();"/></td>
+                <td><input type="button" value="立即注册" class="log_btn" @click="registerUser"/></td>
               </tr>
             </table>
-          </form>
+          </el-form>
         </div>
       </div>
     </div>
@@ -63,12 +67,34 @@
 </template>
 
 <script>
-
+  import {reguser} from "@/api/product/register"
   export default {
     name: "register",
     data() {
       return {
-        url: "http://127.0.0.1:89/productimg/"
+        getCode:true,
+        countTime:0,
+        url: "http://127.0.0.1:89/productimg/",
+        queryParams: {
+          userName:undefined,
+          phoneno:undefined,
+          password:undefined,
+          password1:undefined
+        },
+        rules: {
+          userName: [
+            { required: true, message: '账号不能为空', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '密码不能为空', trigger: 'blur' }
+          ],
+          phoneno: [
+            { required: true, message: '手机号不能为空', trigger: 'blur' }
+          ],
+          password1: [
+            { required: true, message: '请再次输入密码', trigger: 'blur' }
+          ]
+        }
       }
     },
     methods:{
@@ -80,6 +106,58 @@
       },
       register(){
         this.$router.push({path:"/register"});
+      },
+      registerUser(){
+        if(this.queryParams.userName==undefined||this.queryParams.userName==""){
+          this.$message("用户名不能为空");
+          return false;
+        }
+        if(this.queryParams.password==undefined||this.queryParams.password==""){
+          this.$message('密码不能为空');
+          return false;
+        }
+        if(this.queryParams.phoneno==undefined||this.queryParams.phoneno==""){
+          this.$message('手机号不能为空');
+          return false;
+        }
+        if(this.queryParams.password1==undefined||this.queryParams.password1==""){
+          this.$message('请再次输入密码');
+          return false;
+        }
+        if(this.queryParams.password!=this.queryParams.password1){
+          this.$message('两次输入密码不正确');
+          return false;
+        }
+          reguser(this.queryParams).then(response =>{
+            if(response.data.retCode=="666"){
+              alert(response.data.MsgCode);
+              this.$router.push({path:"/login"});
+            }else if(response.data.retCode=="555"){
+              alert(response.data.MsgCode)
+            }else if(response.data.retCode=="556") {
+              alert(response.data.MsgCode)
+            }else if(response.data.retCode=="777"){
+              alert(response.data.MsgCode)
+            }else{
+              alert(response.data.MsgCode)
+            }
+          })
+
+
+      },
+      TranvCode(){
+        this.countTime=61;
+        this.getCode=false;
+        let that = this;
+        that.countTime--;
+        let timer = setInterval(function () {
+          if (that.countTime>1){
+            that.countTime--
+          }else{
+            clearInterval(timer);
+            that.getCode = true;
+          }
+        },1000)
       }
     }
   };
@@ -2672,6 +2750,20 @@
     height: 38px;
     line-height: 38px \9;
     overflow: hidden;
+    background: url(http://127.0.0.1:89/productimg/i_tel.png) no-repeat 285px center;
+    background-color: #FFF;
+    color: #888888;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    padding: 0 40px 0 10px;
+    border: 1px solid #cccccc;
+  }
+  .l_tel1 {
+    width: 267px;
+    height: 38px;
+    line-height: 38px \9;
+    overflow: hidden;
+
     background: url(http://127.0.0.1:89/productimg/i_tel.png) no-repeat 285px center;
     background-color: #FFF;
     color: #888888;

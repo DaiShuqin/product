@@ -11,7 +11,7 @@
       <div class="sou">
         <!--Begin 所在收货地区 Begin-->
         <span class="s_city_b" v-if="isOk">
-            <span class="fl">你好，请<a @click="login"  style="color:#ff4e00;">登录</a>&nbsp;<a href="${ctx}/Register?action=toRegister" style="color:#ff4e00;">免费注册</a>&nbsp;&nbsp;</span>
+            <span class="fl">你好，请<a @click="login"  style="color:#ff4e00;">登录</a>&nbsp;<a @click="register" style="color:#ff4e00;">免费注册</a>&nbsp;&nbsp;</span>
       </span>
         <!--End 所在收货地区 End-->
         <span class="fr" v-else>
@@ -60,6 +60,9 @@
       methods:{
         login(){
           this.$router.push({path:"/login"});
+        },
+        register(){
+          this.$router.push({path:"/register"});
         }
       },
       watch(){

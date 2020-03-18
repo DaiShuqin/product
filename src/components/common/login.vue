@@ -2,7 +2,7 @@
   <div>
     <div class="log_bg">
       <div class="top">
-        <div class="logo"><a href="${ctx}/Home?action=index"><h1>购物商城</h1></a></div>
+        <div class="logo"><a @click="index"><h1>购物商城</h1></a></div>
       </div>
       <div class="login">
         <div class="log_img"><img :src="url+'l_img.png'" width="611" height="425" /></div>
@@ -13,7 +13,7 @@
                 <td width="55">&nbsp;</td>
                 <td>
                   <span class="fl" style="font-size:24px;">登录</span>
-                  <span class="fr">还没有商城账号，<a href="${ctx}/Register?action=toRegister" style="color:#ff4e00;">立即注册</a></span>
+                  <span class="fr">还没有商城账号，<a @click="register" style="color:#ff4e00;">立即注册</a></span>
                 </td>
               </tr>
               <tr height="70">
@@ -57,6 +57,17 @@
     data() {
       return {
         url: "http://127.0.0.1:89/productimg/"
+      }
+    },
+    methods:{
+      index(){
+        this.$router.push({path:"/index"});
+      },
+      login(){
+        this.$router.push({path:"/login"});
+      },
+      register(){
+        this.$router.push({path:"/register"});
       }
     }
   };

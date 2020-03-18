@@ -1,321 +1,92 @@
 <template>
-<div>
-  <el-row>
-    <el-col :span="24" :xs="24">
-      <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="100px">
-        <el-form-item label="商品名称" prop="name">
-          <el-input
-            v-model="queryParams.goodsName"
-            placeholder="请输入商品名称"
-            clearable
-            size="small"
-            style="width: 500px;height: 80px"
-            @keyup.enter.native="getlist1"
-          />
-        </el-form-item>
-        <el-form-item label="最低价格">
-          <el-input-number v-model="queryParams.minNum" @change="" :min="0" :max="10000" label="最低价格">最低价格</el-input-number>
-        </el-form-item>
-        <el-form-item label="最高价格">
-          <el-input-number v-model="queryParams.maxNum" @change="" :min="0" :max="10000" label="最高价格">最高价格</el-input-number>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="getlist1">搜索</el-button>
-        </el-form-item>
-      </el-form>
+  <div>
+    <div class="log_bg">
+      <div class="top">
+        <div class="logo"><a @click="index"><h1>购物商城</h1></a></div>
+      </div>
+      <div class="regist">
+        <div class="log_img"><img :src="url+'l_img.png'" width="611" height="425"/></div>
+        <div class="reg_c">
+          <form id="register">
+            <table border="0" style="width:420px; font-size:14px; margin-top:20px;" cellspacing="0" cellpadding="0">
+              <tr height="50" valign="top">
+                <td width="95">&nbsp;</td>
+                <td>
+                  <span class="fl" style="font-size:24px;">注册</span>
+                  <span class="fr">已有商城账号，<a @click="login" style="color:#ff4e00;">我要登录</a></span>
+                </td>
+              </tr>
+              <tr height="70">
+                <td align="right"><font color="#ff4e00">*</font>登录用户名 &nbsp;</td>
+                <td><input type="text" value="" name="loginName" class="l_user"/></td>
+              </tr>
+              <tr height="70">
+                <td align="right"><font color="#ff4e00">*</font>&nbsp;密码 &nbsp;</td>
+                <td><input type="password" value="" name="password" class="l_pwd"/></td>
+              </tr>
+              <tr height="70">
+                <td align="right"><font color="#ff4e00">*</font>&nbsp;确认密码 &nbsp;</td>
+                <td><input type="password" value="" name="confirmPassword" class="l_pwd"/></td>
+              </tr>
 
-      <div style="">
-        <el-form :inline="true" label-width="100px">
-          <el-form-item>
-            <div class="menu_bg">
-              <div class="menu">
-                <!--Begin 商品分类详情 Begin-->
-                <div class="nav" @mouseleave="leave">
-                  <div class="nav_t" v-if="islevel">全部商品分类</div>
-                  <div class="nav_t" @mouseenter="enter" v-else>全部商品分类</div>
-                  <div class="leftNav" v-show="catea">
-                    <ul>
-                        <li v-for="item in catelist" :key="item">
-                          <div class="fj">
-                            <span class="n_img"><span></span>
-                            <img src=""/></span>
-                            <span class="fl">{{item.name}}</span>
-<!--                            <div v-for="item2 in catelista">{{cateList2(item2.id)}}</div>-->
-                          </div>
-                          <div class="zj" @mouseleave="leave">
-                            <div class="zj_l">
-                              <div class="zj_l_c" v-for="item1 in catelistb" :key="item1" v-if="(item1.parentId==item.id)">
-                                <h2>
-                                  <a @click="getList(item1.id,2)">{{item1.name}}</a>
-                                </h2>
-                                <a v-for="item2 in catelistb" :key="item2" @click="getList(item2.id,3)" v-if="(item2.parentId==item1.id)">{{item2.name}} |</a>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                    </ul>
-                  </div>
-                </div>
-                <ul class="menu_r" style="">
-                  <li><a @click="index()">首页</a></li>
-                  <li v-for="item in catelist" :key="item"><a @click="getList(item.id,1)">{{item.name}}</a></li>
-                </ul>
-                <div class="m_ad" style="color: #bad4f4">爱买就来买一买！</div>
-                <!--End 商品分类详情 End-->
-              </div>
-            </div>
-            <ul class="menu_r">
-             </ul>
-            <div class="m_ad"></div>
-          </el-form-item>
-          <el-form-item v-show="islevel">
-            <div class="banner">
-              <div class="top_slide_wrap">
-                <div class="block">
-                  <el-carousel height="370px">
-                    <el-carousel-item v-for="item in 6" :key="item">
-                      <el-image :src="url+'ban'+item+'.jpg'" style="width: 100%;height: 100%"></el-image>
-                      <h3 class="medium">{{ item }}</h3>
-                    </el-carousel-item>
-                  </el-carousel>
-                </div>
-              </div>
-            </div>
-
-          </el-form-item>
-          <el-form-item v-show="islevel">
-            <div class="inews" style="text-align: left">
-              <div class="news_t">
-                <span class="fr"><a @click="news">更多 ></a></span>新闻资讯
-              </div>
-              <ul>
-                  <li v-for="item in noticelist" :key="item"><span>[ 公告 ]</span>
-                    <a @click="">{{item.noticeContent}}</a>
-                  </li>
-              </ul>
-            </div>
-          </el-form-item>
-        </el-form>
-        <div class="content mar_20" v-show="islevel">
-          <img :src="url+'/mban_1.jpg'" width="1200" height="110"/>
+              <tr height="70">
+                <td align="right">&nbsp;手机 &nbsp;</td>
+                <td><input type="text" value="" name="mobile" class="l_tel"/></td>
+              </tr>
+              <tr height="70">
+                <td align="right"><el-button>&nbsp;发送验证码 &nbsp;</el-button></td>
+                <td><input type="text" value="" name="mobile" class="l_tel"/></td>
+              </tr>
+              <tr height="89">
+                <td>&nbsp;</td>
+                <td><input type="button" value="立即注册" class="log_btn" onclick="register();"/></td>
+              </tr>
+            </table>
+          </form>
         </div>
       </div>
-    </el-col>
+    </div>
+    <!--End Login End-->
+    <!--Begin Footer Begin-->
+    <div class="btmbg">
+      <div class="btm">
+        备案/许可证编号：蜀ICP备12009302号-1-www.dingguagua.com Copyright © 2015-2018 商城网 All Rights Reserved. 复制必究 , Technical
+        Support: Dgg Group <br/>
+        <img :src="url+'b_1.gif'" width="98" height="33"/><img :src="url+'b_2.gif'"  width="98" height="33"/><img
+        :src="url+'b_3.gif'" width="98" height="33"/><img :src="url+'b_4.gif'"   width="98" height="33"/><img
+        :src="url+'b_5.gif'" width="98" height="33"/><img :src="url+'b_6.gif'"   width="98" height="33"/>
+      </div>
+    </div>
+    <!--End Footer End -->
+  </div>
 
-    <el-col>
-      <div class="content mar_20" v-if="goodsli">
-      <div class="fresh_mid">
-        <ul>
-          <li v-for="item in goodslist" :key="item">
-              <div class="name"><a href="#">{{item.goodsName}}</a></div>
-              <div class="price">
-                <font>￥<span>{{item.price}}</span></font> &nbsp;
-              </div>
-              <div class="img">
-                <a @click="goodsDe(item.id)">
-                  <img :src="url +item.filename" width="185"  height="155"/>
-                </a>
-              </div>
-            </li>
-        </ul>
-      </div>
-        <h1 v-show="isShow">无数据</h1>
-      </div>
-      <div v-if="goodsde">
-        <goodsdeatil v-bind:goods="goodsitem"/>
-      </div>
-    </el-col>
-  </el-row>
-</div>
 </template>
 
 <script>
-  import {listgoods,goodsBean} from "@/api/product/index";
-  import {categorylist} from "@/api/product/cate";
-  import {noticelist} from "../../../api/product/notice";
-  import goodsdeatil from "../goods/goodsdeatil";
-  // import $ from jquery;
+
   export default {
-        name: "main",
-      data(){
-          return{
-            queryParams: {
-              goodsName: undefined,
-              pageSize:2,
-              pageNum:1,
-              categorylevel1id:undefined,
-              categorylevel2id:undefined,
-              categorylevel3id:undefined,
-              list:[],
-              minNum:0,
-              maxNum:0
-            },
-            catea:true,
-            goodslist:[],
-            loginForm: {
-              userName: undefined,
-              userPwd: undefined,
-              yzm:""
-            },
-            count:0,
-            loading:false,
-            goodsde:false,
-            goodsli:true,
-            msg:{},
-            usermsg:"",
-            isShow:true,
-            url:"http://127.0.0.1:89/productimg/",
-            catelist:{},
-            catelistb:{},
-            noticelist:{},
-            cateparams:{
-              parentId:0
-            },
-            islevel:true,
-            goodsitem:{}
-          }
+    name: "register",
+    data() {
+      return {
+        url: "http://127.0.0.1:89/productimg/"
+      }
+    },
+    methods:{
+      index(){
+        this.$router.push({path:"/index"});
       },
-      watch(){
-
+      login(){
+        this.$router.push({path:"/login"});
       },
-      methods:{
-        index(){
-          this.islevel=true;
-          this.catea=true;
-          this.goodsli=true;
-          this.goodsde=false;
-          this.paramis();
-          this.queryParams.goodsName=null;
-          this.listg();
-          this.$router.push({path:"/index"});
-        },
-        paramis(){
-          this.queryParams.categorylevel1id=undefined;
-          this.queryParams.categorylevel2id=undefined;
-          this.queryParams.categorylevel3id=undefined;
-        },
-        news(){
-          this.$router.push({path:"/news"});
-        },
-        goodsDe(e){
-          this.islevel=false;
-          this.catea=false;
-          this.goodsli=false;
-          debugger
-          goodsBean(e).then(response=>{
-            this.goodsitem=response.data.retData;
-          })
-          this.goodsde=true;
-          // alert(this.goodsitem.filename)
-        },
-        getList(e,a){
-          debugger
-          this.goodsli=true;
-          this.goodsde=false;
-          this.paramis();
-          if(e==null){
-            this.islevel=true;
-            this.catea=true;
-          }else{
-            this.islevel=false;
-            this.catea=false;
-          }
-          if(a==1){
-            this.queryParams.categorylevel1id=e;
-
-          }else if(a==2){
-            this.queryParams.categorylevel2id=e;
-
-          }else if(a==3){
-            this.queryParams.categorylevel3id=e;
-
-          }
-          // this.queryParams.categorylevel1id=e;
-          this.loading = true;
-          this.listg()
-          this.queryParams.goodsName=null;
-        },
-        listg(){
-          listgoods(this.queryParams).then(response=>{
-            this.goodslist = response.data.retData;
-            this.count=response.data.count;
-            // alert(this.count)
-            // // alert(this.goodslist)
-            // this.total=response.data.total;
-            if(this.count==0){
-              this.isShow=true;
-            }else{
-              this.isShow=false;
-            }
-            this.loading = false;
-          })
-        },
-        getlist1(){
-          debugger
-          this.islevel=false;
-          this.goodsli=true;
-          this.goodsde=false;
-          this.catea=false;
-          this.loading = true;
-          this.queryParams.categorylevel1id=null;
-          this.paramis();
-          this.listg();
-        },
-        enter(index){
-          this.catea = true;
-        },
-        leave(){
-          if(this.islevel!=true) {
-            this.catea = false;
-          }
-        },
-        cateList(){
-          debugger
-          categorylist(this.cateparams).then(response=>{
-            this.catelist=response.data.retData;
-            // alert(this.catelist)
-          })
-          categorylist(null).then(response=>{
-            this.catelistb=response.data.retData;
-            // alert(this.catelist)
-          })
-        },
-        noticeList(){
-          noticelist(null).then(response=>{
-            this.noticelist=response.data.retData;
-          })
-        },
-        handleQuery(){
-          this.getList();
-        }
-      },
-    // mounted() {
-    //   if(this.goodslist==null){
-    //     this.isShow=true;
-    //   }else{
-    //     this.isShow=false;
-    //   }
-    // }
-    // ,
-      created() {
-        this.isShow=false;
-        this.getList();
-        this.cateList();
-        this.noticeList();
-      },
-    components:{
-      goodsdeatil
+      register(){
+        this.$router.push({path:"/register"});
+      }
     }
-    }
+  };
 </script>
+<style>
 
-<style scoped>
-  .nav ul li:hover div{
-    display: block;
-  }
-  .nav ul li:hover {
-    background-color: #bad4f4;
-  }
+  /* CSS Document */
   body {
     margin: 0;
     padding: 0;
@@ -703,7 +474,7 @@
   }
 
   ul.cars li .name {
-    width: 180px;
+    width: 189px;
     height: 40px;
     line-height: 20px;
     overflow: hidden;
@@ -723,7 +494,7 @@
   }
 
   ul.cars li .price {
-    width: 180px;
+    width: 189px;
     height: 20px;
     line-height: 20px;
     overflow: hidden;
@@ -785,7 +556,7 @@
     color: #3e3e3e;
     font-size: 16px;
     position: relative;
-    z-index: 800;
+    z-index: 890;
   }
 
   ul.menu_r {
@@ -817,7 +588,7 @@
   }
 
   ul.menu_r li a:hover, ul.menu_r li a.now {
-    color: #cccccc;
+    color: #ff4e00;
   }
 
   .m_ad {
@@ -849,12 +620,11 @@
     color: #FFF;
     font-size: 16px;
     text-indent: 35px;
-    text-align: left;
   }
 
   .leftNav {
     width: 211px;
-    height: 420px;
+    height: 412px;
     background-color: #ff4e00;
     position: absolute;
     left: 0;
@@ -971,7 +741,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    z-index:10000;
+    z-index: 901;
   }
 
   .leftNav ul li .fj.nuw {
@@ -981,7 +751,7 @@
     line-height: 40px;
     background-color: #FFF;
     color: #ff4e00;
-    z-index: 800px;
+    z-index: 890px;
   }
 
   .leftNav .zj {
@@ -992,7 +762,7 @@
     position: absolute;
     left: 210px;
     top: 0;
-    z-index: 799;
+    display: none;
   }
 
   .leftNav .zj .zj_l {
@@ -1006,7 +776,7 @@
   }
 
   .leftNav .zj .zj_l_c {
-    width: 280px;
+    width: 289px;
     height: 108px;
     line-height: 25px;
     overflow: hidden;
@@ -1155,7 +925,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=80)
+    *filter: alpha(opacity=89)
   }
 
   .banner .slide_info_card .slide_info_card_text {
@@ -1204,7 +974,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 80px;
+    margin-top: 89px;
   }
 
   .banner .op_btns .op_prev {
@@ -1270,7 +1040,7 @@
   }
   .banner .a_bigImg{ position:absolute; left:0px; top:0px; display:none; width:850px; height:430px; overflow:hidden; }
   .banner .a_bigImg .name{
-    width:850px; height:80px; line-height:80px; overflow:hidden; background:url(http://127.0.0.1:89/productimg/b_name.png) repeat-x center top; color:#333333; font-size:20px; text-align:center; position:absolute; left:0; bottom:40px;
+    width:850px; height:89px; line-height:89px; overflow:hidden; background:url(http://127.0.0.1:89/productimg/b_name.png) repeat-x center top; color:#333333; font-size:20px; text-align:center; position:absolute; left:0; bottom:40px;
   }
   .banner .ul_change_a2{ position:absolute; left:10px; bottom:15px; overflow:hidden; text-align:center; }
   .banner .ul_change_a2 li{
@@ -1283,7 +1053,7 @@
 
   .inews {
     width: 225px;
-    height: 370px;
+    height: 399px;
     background-color: #FFF;
     float: right;
     border: 1px solid #d9d9d9;
@@ -1313,7 +1083,7 @@
   }
 
   .inews ul {
-    height: 300px;
+    height: 150px;
     overflow: hidden;
     margin: 10px 10px 20px 10px;
   }
@@ -1459,7 +1229,7 @@
   }
 
   .c_btn {
-    width: 80px;
+    width: 89px;
     height: 26px;
     line-height: 26px \9;
     background-color: #ff4e00;
@@ -1592,7 +1362,7 @@
   }
 
   .hot_pro .featureUL {
-    width: 2800px;
+    width: 2890px;
     height: 375px;
     overflow: hidden;
     float: left;
@@ -2122,11 +1892,11 @@
   }
 
   .fresh_mid {
-    width: 1400px;
-    height: auto;
+    width: 729px;
+    height: 441px;
     overflow: hidden;
     background-color: #FFF;
-    left: 500px;
+    float: left;
   }
 
   .fresh_mid ul li {
@@ -2685,7 +2455,7 @@
   }
 
   .like .featureUL {
-    width: 2800px;
+    width: 2890px;
     height: 375px;
     overflow: hidden;
     float: left;
@@ -3127,7 +2897,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=80)
+    *filter: alpha(opacity=89)
   }
 
   .nban .slide_info_card .slide_info_card_text {
@@ -3176,7 +2946,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 80px;
+    margin-top: 89px;
   }
 
   .nban .op_btns .op_prev {
@@ -4416,7 +4186,7 @@
   }
 
   .notice_c {
-    width: 480px;
+    width: 489px;
     overflow: hidden;
     margin-top: 10px;
   }
@@ -4530,7 +4300,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=80)
+    *filter: alpha(opacity=89)
   }
 
   .n_ban .slide_info_card .slide_info_card_text {
@@ -4567,7 +4337,7 @@
   /* op_btns */
   .n_ban .op_btns {
     width: 1200px;
-    margin-top: -680px;
+    margin-top: -689px;
     position: relative;
     z-index: 3;
   }
@@ -4579,7 +4349,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 80px;
+    margin-top: 89px;
   }
 
   .n_ban .op_btns .op_prev {
@@ -5012,7 +4782,7 @@
   }
 
   .lim_price .ch_a {
-    width: 80px;
+    width: 89px;
     height: 40px;
     line-height: 40px;
     overflow: hidden;
@@ -5420,7 +5190,7 @@
     padding: 4px 4px 4px 4px;
     z-index: 1;
     display: none;
-    width: 180px;
+    width: 189px;
   }
 
   .order_tab .jslct_hover dl {

@@ -7,3 +7,9 @@ export function listgoods(goods) {
       params: goods
   })
 }
+export function goodsBean(goodsId) {
+  return request({
+    url: '/goods/goodsId/'+goodsId,
+    method: 'post',
+  })
+}

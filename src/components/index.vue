@@ -7,7 +7,7 @@
       <el-main>
         <shopmain/>
       </el-main>
-      <el-footer>
+      <el-footer class="footer">
         <shopfooter/>
       </el-footer>
     </el-container>
@@ -36,6 +36,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .footer{
+    z-index: -1;
+  }
   .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;

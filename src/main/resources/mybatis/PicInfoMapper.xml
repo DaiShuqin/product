@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.t132.productidea.mapper.PicInfoMapper">
+  <resultMap id="BaseResultMap" type="com.bdqn.t132.productidea.pojo.PicInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="pic_desc" jdbcType="VARCHAR" property="picDesc" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="is_master" jdbcType="TINYINT" property="isMaster" />
+    <result column="pic_order" jdbcType="TINYINT" property="picOrder" />
+    <result column="pic_status" jdbcType="TINYINT" property="picStatus" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, goods_id, pic_desc, pic_url, is_master, pic_order, pic_status, modified_time
+  </sql>
+    <select id="selectPicList" resultType="com.bdqn.t132.productidea.pojo.PicInfo">
+        select
+        <include refid="Base_Column_List" />
+        from shop_pic_info
+        where goods_id=#{goodsId}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_pic_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shop_pic_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bdqn.t132.productidea.pojo.PicInfo">
+    insert into shop_pic_info (id, goods_id, pic_desc, 
+      pic_url, is_master, pic_order, 
+      pic_status, modified_time)
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{picDesc,jdbcType=VARCHAR}, 
+      #{picUrl,jdbcType=VARCHAR}, #{isMaster,jdbcType=TINYINT}, #{picOrder,jdbcType=TINYINT}, 
+      #{picStatus,jdbcType=TINYINT}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bdqn.t132.productidea.pojo.PicInfo">
+    insert into shop_pic_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="picDesc != null">
+        pic_desc,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="isMaster != null">
+        is_master,
+      </if>
+      <if test="picOrder != null">
+        pic_order,
+      </if>
+      <if test="picStatus != null">
+        pic_status,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="picDesc != null">
+        #{picDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isMaster != null">
+        #{isMaster,jdbcType=TINYINT},
+      </if>
+      <if test="picOrder != null">
+        #{picOrder,jdbcType=TINYINT},
+      </if>
+      <if test="picStatus != null">
+        #{picStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bdqn.t132.productidea.pojo.PicInfo">
+    update shop_pic_info
+    <set>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="picDesc != null">
+        pic_desc = #{picDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isMaster != null">
+        is_master = #{isMaster,jdbcType=TINYINT},
+      </if>
+      <if test="picOrder != null">
+        pic_order = #{picOrder,jdbcType=TINYINT},
+      </if>
+      <if test="picStatus != null">
+        pic_status = #{picStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bdqn.t132.productidea.pojo.PicInfo">
+    update shop_pic_info
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      pic_desc = #{picDesc,jdbcType=VARCHAR},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      is_master = #{isMaster,jdbcType=TINYINT},
+      pic_order = #{picOrder,jdbcType=TINYINT},
+      pic_status = #{picStatus,jdbcType=TINYINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

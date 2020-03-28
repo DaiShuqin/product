@@ -17,6 +17,6 @@ public interface NoticeInfoMapper {
 
     int updateByPrimaryKeySelective(NoticeInfo record);
     List<NoticeInfo> selectNoticeList(NoticeInfo record);
-
+    int count();
     int updateByPrimaryKey(NoticeInfo record);
 }

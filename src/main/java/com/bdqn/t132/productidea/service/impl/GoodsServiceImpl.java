@@ -2,7 +2,9 @@ package com.bdqn.t132.productidea.service.impl;
 
 import com.bdqn.t132.productidea.mapper.GoodsInfoMapper;
 import com.bdqn.t132.productidea.pojo.GoodsInfo;
+import com.bdqn.t132.productidea.pojo.PicInfo;
 import com.bdqn.t132.productidea.service.GoodsService;
+import com.bdqn.t132.productidea.service.PicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +18,8 @@ import java.util.Map;
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     GoodsInfoMapper goodsInfoMapper;
+    @Autowired
+    PicService picService;
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return 0;
@@ -32,8 +36,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsInfo selectByPrimaryKey(Integer id) {
-        return null;
+    public Map selectByPrimaryKey(Integer id) {
+        Map map=new HashMap();
+        GoodsInfo goods=goodsInfoMapper.selectByPrimaryKey(id);
+//        System.out.println(goodslist.get(0).getGoodsName());
+        map.put("retData",goods);
+        return map;
     }
 
     @Override

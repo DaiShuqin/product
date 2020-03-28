@@ -4,6 +4,7 @@ import com.bdqn.t132.productidea.mapper.NoticeInfoMapper;
 import com.bdqn.t132.productidea.pojo.GoodsCategory;
 import com.bdqn.t132.productidea.pojo.NoticeInfo;
 import com.bdqn.t132.productidea.service.NoticeService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,8 +34,16 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public NoticeInfo selectByPrimaryKey(Integer noticeId) {
-        return null;
+    public int count() {
+        return noticeInfoMapper.count();
+    }
+
+    @Override
+    public Map selectByPrimaryKey(Integer noticeId) {
+        NoticeInfo noticeInfo=noticeInfoMapper.selectByPrimaryKey(noticeId);
+        Map map=new HashMap();
+        map.put("retData",noticeInfo);
+        return map;
     }
 
     @Override
@@ -55,4 +64,16 @@ public class NoticeServiceImpl implements NoticeService {
         map.put("retData",list);
         return map;
     }
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Map list(NoticeInfo record) {
+        PageHelper.startPage(record.getPageNum(),record.getPageSize());
+        List<NoticeInfo> list=noticeInfoMapper.selectNoticeList(record);
+        Map map=new HashMap();
+        map.put("retData",list);
+        System.out.println("================"+this.count());
+        map.put("retTotal",this.count());
+        return map;
+    }
+
 }

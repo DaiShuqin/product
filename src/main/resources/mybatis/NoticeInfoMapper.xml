@@ -17,6 +17,9 @@
         <include refid="Base_Column_List" />
         from shop_notice_info
     </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from shop_notice_info
+    </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

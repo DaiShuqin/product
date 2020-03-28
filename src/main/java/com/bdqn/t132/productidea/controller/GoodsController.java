@@ -3,9 +3,7 @@ package com.bdqn.t132.productidea.controller;
 import com.bdqn.t132.productidea.pojo.GoodsInfo;
 import com.bdqn.t132.productidea.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +18,11 @@ public class GoodsController {
     @RequestMapping("/list")
     public Object nn(GoodsInfo goodsInfo){
         Map map=goodsService.dolist(goodsInfo);
+        return map;
+    }
+    @RequestMapping("/goodsId/{goodsId}")
+    public Object goodsId(@PathVariable Integer goodsId){
+        Map map=goodsService.selectByPrimaryKey(goodsId);
         return map;
     }
 }

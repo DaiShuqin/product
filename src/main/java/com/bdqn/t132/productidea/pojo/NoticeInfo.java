@@ -1,14 +1,17 @@
 package com.bdqn.t132.productidea.pojo;
 
+import com.bdqn.t132.productidea.util.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class NoticeInfo {
+public class NoticeInfo extends BaseEntity {
     private Integer noticeId;
 
     private String noticeName;
 
     private String noticeContent;
-
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date startTime;
 
     private Date endTime;

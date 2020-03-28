@@ -1,6 +1,10 @@
 package com.bdqn.t132.productidea.pojo;
 
-public class GoodsCategory {
+import com.bdqn.t132.productidea.util.BaseEntity;
+
+import java.util.List;
+
+public class GoodsCategory extends BaseEntity {
     private Integer id;
 
     private String name;
@@ -10,6 +14,16 @@ public class GoodsCategory {
     private Integer type;
 
     private String iconclass;
+
+    private List<GoodsCategory> list;
+
+    public List<GoodsCategory> getList() {
+        return list;
+    }
+
+    public void setList(List<GoodsCategory> list) {
+        this.list = list;
+    }
 
     public Integer getId() {
         return id;

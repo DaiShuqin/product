@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.t132.productidea.mapper.ShopUserMapper">
+    <resultMap id="BaseResultMap" type="com.bdqn.t132.productidea.pojo.ShopUser">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="phoneno" jdbcType="VARCHAR" property="phoneno" />
+        <result column="pw_err_count" jdbcType="INTEGER" property="pwErrCount" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="user_balance" jdbcType="DECIMAL" property="userBalance" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_name, phoneno, pw_err_count, password, sex, user_balance, url, create_time
+  </sql>
+    <select id="getShopUser" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_user
+        where user_name = #{userName} or phoneno = #{userName}
+    </select>
+    <select id="selectByUser" parameterType="com.bdqn.t132.productidea.pojo.ShopUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_user
+        where user_name = #{userName} or phoneno = #{phoneno}
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByuserphone" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_user
+        where phoneno = #{phone}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shop_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.bdqn.t132.productidea.pojo.ShopUser">
+    insert into shop_user (id, user_name, phoneno,
+      pw_err_count, password, sex,
+      user_balance, url,
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{phoneno,jdbcType=VARCHAR},
+      #{pwErrCount,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
+      #{userBalance,jdbcType=DECIMAL}, #{url,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.bdqn.t132.productidea.pojo.ShopUser">
+        insert into shop_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="phoneno != null">
+                phoneno,
+            </if>
+            <if test="pwErrCount != null">
+                pw_err_count,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="userBalance != null">
+                user_balance,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneno != null">
+                #{phoneno,jdbcType=VARCHAR},
+            </if>
+            <if test="pwErrCount != null">
+                #{pwErrCount,jdbcType=INTEGER},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="userBalance != null">
+                #{userBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bdqn.t132.productidea.pojo.ShopUser">
+        update shop_user
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneno != null">
+                phoneno = #{phoneno,jdbcType=VARCHAR},
+            </if>
+            <if test="pwErrCount != null">
+                pw_err_count = #{pwErrCount,jdbcType=INTEGER},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="userBalance != null">
+                user_balance = #{userBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where phoneno = #{phoneno,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bdqn.t132.productidea.pojo.ShopUser">
+    update shop_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      phoneno = #{phoneno,jdbcType=VARCHAR},
+      pw_err_count = #{pwErrCount,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      user_balance = #{userBalance,jdbcType=DECIMAL},
+      url = #{url,jdbcType=VARCHAR},
+
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -12,9 +12,9 @@ public interface NoticeService {
     int insert(NoticeInfo record);
 
     int insertSelective(NoticeInfo record);
-
-    NoticeInfo selectByPrimaryKey(Integer noticeId);
-
+    int count();
+    Map selectByPrimaryKey(Integer noticeId);
+    Map list(NoticeInfo noticeInfo);
     int updateByPrimaryKeySelective(NoticeInfo record);
     int updateByPrimaryKey(NoticeInfo record);
     Map dolist(NoticeInfo record);

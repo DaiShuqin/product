@@ -15,21 +15,39 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+      <collection property="picInfos" ofType="com.bdqn.t132.productidea.pojo.PicInfo" column="pid=id" select="selectPic"></collection>
   </resultMap>
+    <select id="selectPic" resultType="com.bdqn.t132.productidea.pojo.PicInfo">
+        select id, goods_id, pic_desc, pic_url, is_master, pic_order, pic_status, modified_time from shop_pic_info where goods_id=#{pid}
+    </select>
+
   <sql id="Base_Column_List">
     id, goods_name, description, price, stock, categoryLevel1Id, categoryLevel2Id, categoryLevel3Id, 
     fileName, create_time, update_time, status, isDelete
   </sql>
-    <select id="selectGoodsList" resultType="com.bdqn.t132.productidea.pojo.GoodsInfo">
+    <select id="selectGoodsList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from shop_goods_info
         <where>
-            <if test="goodsName!=null">
-                goods_name like concat('%',#{goodsName},'%')
+            stock>=1
+            <if test="goodsName!=null and goodsName!=''">
+                and goods_name like concat('%',#{goodsName},'%')
             </if>
             <if test="categorylevel1id!=null">
                 and categorylevel1id = #{categorylevel1id}
+            </if>
+            <if test="categorylevel2id!=0 and categorylevel2id!=null">
+                and categorylevel2id = #{categorylevel2id}
+            </if>
+            <if test="categorylevel3id!=0 and categorylevel3id!=null">
+                and categorylevel3id = #{categorylevel3id}
+            </if>
+            <if test="minNum!=0">
+                and price &gt;= #{minNum}
+            </if>
+            <if test="maxNum!=0">
+                and price &lt;= #{maxNum}
             </if>
         </where>
     </select>

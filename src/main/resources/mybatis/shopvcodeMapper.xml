@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.t132.productidea.mapper.shopvcodeMapper">
+    <resultMap id="BaseResultMap" type="com.bdqn.t132.productidea.pojo.shopvcode">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="vcode" jdbcType="VARCHAR" property="vcode" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="isNo" jdbcType="INTEGER" property="isno" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, telephone, vcode, type, create_time, isNo
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_vcode
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectvcode" parameterType="com.bdqn.t132.productidea.pojo.shopvcode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_vcode
+        where vcode = #{vcode} and isNo = 1 and telephone = #{telephone}
+    </select>
+    <select id="selectvcodeTime" resultMap="BaseResultMap" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+        select
+        <include refid="Base_Column_List" />
+        from shop_vcode
+        where round((UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(create_time))/60) > 1 and vcode = #{vcode} and telephone = #{telephone}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shop_vcode
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+    insert into shop_vcode (id, telephone, vcode,
+      type, create_time, isNo
+      )
+    values (#{id,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, #{vcode,jdbcType=VARCHAR},
+      #{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isno,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+        insert into shop_vcode
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="vcode != null">
+                vcode,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isno != null">
+                isNo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="vcode != null">
+                #{vcode,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isno != null">
+                #{isno,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+        update shop_vcode
+        <set>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="vcode != null">
+                vcode = #{vcode,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isno != null">
+                isNo = #{isno,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeySelectiveVcode" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+        update shop_vcode
+        <set>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="vcode != null">
+                vcode = #{vcode,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isno != null">
+                isNo = #{isno,jdbcType=INTEGER},
+            </if>
+        </set>
+        where vcode = #{vcode,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bdqn.t132.productidea.pojo.shopvcode">
+    update shop_vcode
+    set telephone = #{telephone,jdbcType=VARCHAR},
+      vcode = #{vcode,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      isNo = #{isno,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

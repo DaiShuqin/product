@@ -3,6 +3,7 @@ package com.bdqn.t132.productidea.pojo;
 import com.bdqn.t132.productidea.util.BaseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 public class GoodsInfo extends BaseEntity {
     private Integer id;
@@ -30,6 +31,17 @@ public class GoodsInfo extends BaseEntity {
     private Integer status;
 
     private Integer isdelete;
+
+    private List<PicInfo> picInfos;
+
+    public List<PicInfo> getPicInfos() {
+        return picInfos;
+    }
+
+    public void setPicInfos(List<PicInfo> picInfos) {
+        this.picInfos = picInfos;
+    }
+
 
     public Integer getId() {
         return id;

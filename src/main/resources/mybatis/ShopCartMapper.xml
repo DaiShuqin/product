@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.t132.productidea.mapper.ShopCartMapper">
+  <resultMap id="BaseResultMap" type="com.bdqn.t132.productidea.pojo.ShopCart">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="number" jdbcType="DECIMAL" property="number" />
+    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="sumPrice" jdbcType="DECIMAL" property="sumPrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <collection property="goodsInfo" javaType="com.bdqn.t132.productidea.pojo.GoodsInfo" select="selectGoods" column="gid=goods_id">
+      </collection>
+  </resultMap>
+    <resultMap id="goodsMap" type="com.bdqn.t132.productidea.pojo.GoodsInfo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="price" jdbcType="REAL" property="price" />
+        <result column="stock" jdbcType="INTEGER" property="stock" />
+        <result column="categoryLevel1Id" jdbcType="INTEGER" property="categorylevel1id" />
+        <result column="categoryLevel2Id" jdbcType="INTEGER" property="categorylevel2id" />
+        <result column="categoryLevel3Id" jdbcType="INTEGER" property="categorylevel3id" />
+        <result column="fileName" jdbcType="VARCHAR" property="filename" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    </resultMap>
+    <select id="selectGoods" resultMap="goodsMap">
+        select
+         id, goods_name, description, price, stock, categoryLevel1Id, categoryLevel2Id, categoryLevel3Id,
+    fileName, create_time, update_time, status, isDelete
+        from shop_goods_info
+        where id = #{gid}
+    </select>
+    <select id="selectCartList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from shop_shopcart where user_id=#{id}
+    </select>
+  <sql id="Base_Column_List">
+    id, goods_id, user_id, number, unit_price, total_price, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_shopcart
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shop_shopcart
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bdqn.t132.productidea.pojo.ShopCart">
+    insert into shop_shopcart (id, goods_id, user_id, 
+      number, unit_price, total_price, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{number,jdbcType=DECIMAL}, #{unitPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bdqn.t132.productidea.pojo.ShopCart">
+    insert into shop_shopcart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=DECIMAL},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bdqn.t132.productidea.pojo.ShopCart">
+    update shop_shopcart
+    <set>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=DECIMAL},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bdqn.t132.productidea.pojo.ShopCart">
+    update shop_shopcart
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      number = #{number,jdbcType=DECIMAL},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

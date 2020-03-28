@@ -12,7 +12,7 @@ public interface GoodsService {
 
     int insertSelective(GoodsInfo record);
 
-    GoodsInfo selectByPrimaryKey(Integer id);
+    Map selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(GoodsInfo record);
 

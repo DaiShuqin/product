@@ -7,6 +7,13 @@
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="iconClass" jdbcType="VARCHAR" property="iconclass" />
+      <collection property="list" ofType="com.bdqn.t132.productidea.pojo.GoodsCategory">
+          <id column="id" jdbcType="INTEGER" property="id" />
+          <result column="name" jdbcType="VARCHAR" property="name" />
+          <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+          <result column="type" jdbcType="INTEGER" property="type" />
+          <result column="iconClass" jdbcType="VARCHAR" property="iconclass" />
+      </collection>
   </resultMap>
   <sql id="Base_Column_List">
     id, name, parent_id, type, iconClass

@@ -1,83 +1,184 @@
 <template>
-<!--<div>-->
-<!--  <div style="width: 500px;position:absolute;left:100px;">您现在处于游客状态，点击<span style="color: red">登录</span></div>-->
-<!--  <div style="width: 100px;position:absolute;left:1600px;">-->
-<!--    <el-button type="success" plain @click="">购物车</el-button>-->
-<!--  </div>-->
-<!--  <h3 class="title">启新商城</h3>-->
-<!--</div>-->
   <div>
     <div class="soubg">
       <div class="sou">
         <!--Begin 所在收货地区 Begin-->
         <span class="s_city_b" v-if="isOk">
-            <span class="fl">你好，请<a @click="login"  style="color:#ff4e00;">登录</a>&nbsp;<a @click="register" style="color:#ff4e00;">免费注册</a>&nbsp;&nbsp;</span>
-      </span>
+            <span class="fl">你好，请<a @click="login"  style="color:#ff4e00;">登录</a>&nbsp;<a @click="register" style="color:#ff4e00;">免费注册</a>&nbsp;
+              &nbsp;</span>
+        </span>
         <!--End 所在收货地区 End-->
         <span class="fr" v-else>
-            <span class="fl"><a href="${ctx}/admin/user?action=index">{{userName}}</a>&nbsp;|&nbsp;<a href="${ctx}/admin/order?action=index&userId=${sessionScope.loginUser.id}">我的订单</a>&nbsp;</span>
-            <span class="fl">|&nbsp;<a href="${ctx}/admin/product?action=index&userId=${sessionScope.loginUser.id}">个人中心</a>&nbsp;</span>
-             <span class="fl">|&nbsp;<a href="${ctx}/Login?action=loginOut" >注销&nbsp;|&nbsp;</a></span>
-            <span class="s_city">
-            	<span>帮助中心</span>
-                <div class="s_city_bg">
-                  <div class="s_city_c">
-<!--                    <h2>请选择所在的收货地区</h2>-->
-                    <table border="0" class="c_tab" style="width:150px; margin-top:10px;" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td class="c_h">新手入门</td>
-                        <th></th>
-                      </tr>
-                      <tr>
-                        <td class="c_h">积分计划</td>
-                      </tr>
-                      <tr>
-                        <td class="c_h">账户管理</td>
-                      </tr>
-                      <tr>
-                        <td class="c_h">售后服务</td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-            </span>
+          <span class="fl">&nbsp;| <a @click="userinfo"><b style="font-size:16px;">{{user.userName}}</b></a>&nbsp;</span>
+          <span class="fl">|&nbsp;<a @click="centers" >个人中心</a></span>
+          <span class="fl">|&nbsp;<a @click="help" >帮助中心</a></span>
+          <span class="fl">|&nbsp;<a @click="index" >首页</a></span>
+          <span class="fl">|&nbsp;<a @click="logout" >注销</a></span>
         </span>
-      </div>
 
+        <span class="fr"><el-button type="primary" size="mini" round class="sub-btn sub1" @click="car">购物车</el-button></span>
+      </div>
     </div>
+    <el-dialog :title="title" :visible.sync="open" width="600px">
+     <el-form>
+       <el-row v-if="isOk">
+         <el-col>还未登录！<router-link to="/login" style="color:#ff4e00;">马上登录</router-link></el-col>
+       </el-row>
+       <div v-else>
+       <el-row v-for="item in carts" :key="item" :gutter="18">
+         <el-col :span="6">
+           <el-form-item>
+             <el-image :src="url+item.goodsInfo.filename" @click="goodsd(item.goodsInfo.id)" style="width:58px;height:58px" />
+           </el-form-item>
+         </el-col>
+         <el-col :span="6">
+           <el-form-item>
+             <a>{{item.goodsInfo.goodsName}}</a>
+           </el-form-item>
+         </el-col>
+         <el-col :span="6">
+           <el-form-item>
+             <span style="color: darkorange">￥{{item.goodsInfo.price}}</span> X{{item.number}}
+           </el-form-item>
+         </el-col>
+       </el-row>
+       <el-row>
+         <el-col>
+           <el-form-item>
+             <span>共计&nbsp;<span style="color:red;font-size: 18px">￥{{sumPrice}}</span></span>
+           </el-form-item>
+         </el-col>
+       </el-row>
+       </div>
+     </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button v-if="isOk" type="primary" @click="login">去登录</el-button>
+        <el-button v-else @click=""><el-image src="http://127.0.0.1:89/productimg/car.png"/>去结算</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-    export default {
+  import {islogin,logoutr} from "@/api/product/login";
+  import {carlist} from "@/api/product/cart";
+  export default {
         name: "header",
       data(){
           return{
             isOk:true,
-            userName:""
+            user:{},
+            open:false,
+            title:"购物车",
+            url:"http://127.0.0.1:89/productimg/",
+            carts:{},
+            sumPrice:0
           }
       },
       methods:{
+        goodsd(e){
+          this.open=false;
+          this.$emit('goodsd',e).$router.push({path:"/index",query:{id:e}});
+          // this.$router.push({path:"/index",query:{id:e}});
+        },
+        first(){
+          this.$emit('indexsy');
+        },
+        centers(){
+          this.$router.push({path:"/shopcenter"});
+        },
+        help(){
+          this.$router.push({path:"/shophelp"});
+        },
+        index(){
+          this.$router.push({path:"/index"});
+        },
+        userinfo(){
+          this.$router.push({path:"/shopuser"});
+        },
+        car(){
+          debugger;
+          this.sumPrice=0
+          this.open=true
+          // alert(this.user.id)
+          carlist(this.user.id).then(response=>{
+            this.carts=response.data.retData;
+            for (let i=0;i<this.carts.length;i++){
+              // alert(this.carts[i].totalPrice)
+              this.sumPrice+=parseInt(this.carts[i].totalPrice);
+            }
+            // alert(this.carts);
+          })
+
+        },
         login(){
           this.$router.push({path:"/login"});
         },
         register(){
           this.$router.push({path:"/register"});
+        },
+        logout(){
+          this.carts={};
+          this.sumPrice=0;
+          this.$confirm('此操作将注销账户, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            logoutr().then(response=>{
+              if (response.data.retCode=='1000'){
+                this.isOk=true
+              }else{
+                this.isOk=false
+              }
+            })
+            this.$message({
+              type: 'success',
+              message: '注销成功!'
+            });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消注销'
+            });
+          });
         }
       },
-      watch(){
-        let myName=JSON.parse(sessionStorage.getItem("userInfo"));
-        if(myName!=null){
-          this.isOk=false
-          this.userName=myName.userName
-        }else{
-          this.isOk=true
+
+    created(){
+        islogin().then(response=>{
+          if (response.data.retCode=='1000'){
+            this.isOk=false
+            this.user=response.data.retData;
+          }else{
+            this.carts=null;
+            this.sumPrice=0;
+            this.isOk=true
+          }
+        })
+      },
+    computed:{
+      sumPrice:function () {
+        let total=0;
+        let that=this;
+        for (let i=0;i<that.carts.length;i++){
+          alert(that.carts[i].totalPrice)
+          total+=parseInt(that.carts[i].totalPrice);
         }
+        return total;
       }
+
+    },
+    mounted() {
+
+    }
     }
 </script>
 
 <style scoped>
+  .shop_cart{
+    z-index: 1100;
+  }
   body {
     margin: 0;
     padding: 0;
@@ -152,7 +253,7 @@
   .soubg {
     width: 100%;
     min-width: 1200px;
-    height: 35px;
+    height: 50px;
     background-color: #f6f6f6;
     font-family: "宋体";
   }
@@ -164,7 +265,7 @@
   }
 
   .s_city_b {
-    width: 250px;
+    width: 300px;
     height: 35px;
     float: left;
   }

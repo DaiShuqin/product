@@ -8,19 +8,19 @@
             v-model="queryParams.goodsName"
             placeholder="请输入商品名称"
             clearable
-            size="small"
-            style="width: 500px;height: 80px"
+            size="min"
+            style="width: 200px;height: 80px"
             @keyup.enter.native="getlist1"
           />
         </el-form-item>
         <el-form-item label="最低价格">
-          <el-input-number v-model="queryParams.minNum" @change="" :min="0" :max="10000" label="最低价格">最低价格</el-input-number>
+          <el-input-number v-model="queryParams.minNum" style="width: 150px;height: 80px" @change="" :min="0" :max="10000" label="最低价格">最低价格</el-input-number>
         </el-form-item>
         <el-form-item label="最高价格">
-          <el-input-number v-model="queryParams.maxNum" @change="" :min="0" :max="10000" label="最高价格">最高价格</el-input-number>
+          <el-input-number v-model="queryParams.maxNum" style="width: 150px;height: 80px" @change="" :min="0" :max="10000" label="最高价格">最高价格</el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="getlist1">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" size="min" @click="getlist1">搜索</el-button>
         </el-form-item>
       </el-form>
 
@@ -73,8 +73,8 @@
               <div class="top_slide_wrap">
                 <div class="block">
                   <el-carousel height="370px">
-                    <el-carousel-item v-for="item in 6" :key="item">
-                      <el-image :src="url+'ban'+item+'.jpg'" style="width: 100%;height: 100%"></el-image>
+                    <el-carousel-item v-for="item in slideshow" :key="item">
+                      <a @click="goodsDe(item.goodsId)"><el-image :src="url+item.slideUrl" style="width: 100%;height: 100%"></el-image></a>
                       <h3 class="medium">{{ item }}</h3>
                     </el-carousel-item>
                   </el-carousel>
@@ -90,7 +90,7 @@
               </div>
               <ul>
                   <li v-for="item in noticelist" :key="item"><span>[ 公告 ]</span>
-                    <a @click="">{{item.noticeContent}}</a>
+                    <a @click="noticedetail(item.noticeId)">{{item.noticeContent}}</a>
                   </li>
               </ul>
             </div>
@@ -124,16 +124,20 @@
       <div v-if="goodsde">
         <goodsdeatil v-bind:goods="goodsitem"/>
       </div>
+<!--      <div v-if="newsde">-->
+<!--        <newsdetail/>-->
+<!--      </div>-->
     </el-col>
   </el-row>
 </div>
 </template>
 
 <script>
-  import {listgoods,goodsBean} from "@/api/product/index";
+  import {listgoods,goodsBean,slideshows} from "@/api/product/index";
   import {categorylist} from "@/api/product/cate";
   import {noticelist} from "../../../api/product/notice";
   import goodsdeatil from "../goods/goodsdeatil";
+  import newsdetail from "../notice/newsdetail";
   // import $ from jquery;
   export default {
         name: "main",
@@ -150,6 +154,8 @@
               minNum:0,
               maxNum:0
             },
+            slideshow:{},
+            newsde:false,
             catea:true,
             goodslist:[],
             loginForm: {
@@ -172,7 +178,7 @@
               parentId:0
             },
             islevel:true,
-            goodsitem:{}
+            goodsitem:{},
           }
       },
       watch(){
@@ -195,7 +201,12 @@
           this.queryParams.categorylevel3id=undefined;
         },
         news(){
-          this.$router.push({path:"/news"});
+          this.$router.push({path:"/newslist"});
+        },
+        getslideshows(){
+          slideshows().then(response=>{
+            this.slideshow=response.data.retData;
+          })
         },
         goodsDe(e){
           this.islevel=false;
@@ -206,7 +217,6 @@
             this.goodsitem=response.data.retData;
           })
           this.goodsde=true;
-          // alert(this.goodsitem.filename)
         },
         getList(e,a){
           debugger
@@ -280,6 +290,9 @@
             // alert(this.catelist)
           })
         },
+        noticedetail(e){
+          this.$router.push({path:"/newsdetail",query:{id:e}})
+        },
         noticeList(){
           noticelist(null).then(response=>{
             this.noticelist=response.data.retData;
@@ -302,9 +315,16 @@
         this.getList();
         this.cateList();
         this.noticeList();
+        this.getslideshows();
+        let n=this.$route.query.id;
+        if(n!=null){
+          this.goodsde(n)
+          this.$forceUpdate()
+        }
       },
     components:{
-      goodsdeatil
+      goodsdeatil,
+      newsdetail
     }
     }
 </script>
@@ -839,6 +859,7 @@
     position: absolute;
     left: 0px;
     top: 0;
+    z-index: 999;
   }
 
   .nav_t {
@@ -910,7 +931,7 @@
     top: 0px;
     border: 1px solid #d4d2d2;
     border-left: 0px;
-    z-index: 900;
+    z-index: 999;
     display: none;
   }
 
@@ -971,7 +992,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    z-index:10000;
+    z-index:999;
   }
 
   .leftNav ul li .fj.nuw {
@@ -981,7 +1002,7 @@
     line-height: 40px;
     background-color: #FFF;
     color: #ff4e00;
-    z-index: 800px;
+    z-index: 999;
   }
 
   .leftNav .zj {
@@ -992,7 +1013,7 @@
     position: absolute;
     left: 210px;
     top: 0;
-    z-index: 799;
+    z-index: 999;
   }
 
   .leftNav .zj .zj_l {

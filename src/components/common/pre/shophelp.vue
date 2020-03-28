@@ -1,201 +1,80 @@
 <template>
-  <div>
-    <div class="log_bg">
-      <div class="top">
-        <div class="logo"><a @click="index"><h1>购物商城</h1></a></div>
-      </div>
-      <div class="regist">
-        <div class="log_img"><img :src="url+'l_img.png'" width="611" height="425"/></div>
-        <div class="reg_c">
-          <el-form id="register" :model="queryParams" :rules="rules" ref="queryParams">
-            <table border="0" style="width:420px; font-size:14px; margin-top:20px;" cellspacing="0" cellpadding="0">
-              <tr height="50" valign="top">
-                <td width="95">&nbsp;</td>
-                <td>
-                  <span class="fl" style="font-size:24px;">注册</span>
-                  <span class="fr">已有商城账号，<a @click="login" style="color:#ff4e00;">我要登录</a></span>
-                </td>
-              </tr>
-              <tr height="70">
-                <td align="right"><font color="#ff4e00">*</font>登录用户名 &nbsp;</td>
-                <td><input v-model="queryParams.userName" type="text" value="" name="loginName" class="l_user"/></td>
-              </tr>
-              <tr height="70">
-                <td align="right"><font color="#ff4e00">*</font>&nbsp;密码 &nbsp;</td>
-                <td><input v-model="queryParams.password" type="password" value="" name="password" class="l_pwd"/></td>
-              </tr>
-              <tr height="70">
-                <td align="right"><font color="#ff4e00">*</font>&nbsp;确认密码 &nbsp;</td>
-                <td><input v-model="queryParams.password1" type="password" value="" name="confirmPassword" class="l_pwd"/></td>
-              </tr>
-              <tr height="70">
-                <td align="right"><font color="#ff4e00">*</font>&nbsp;性别 &nbsp;</td>
-                <td>
-                  <el-radio-group v-model="queryParams.sex">
-                    <el-radio :label="1">男</el-radio>
-                    <el-radio :label="2">女</el-radio>
-                  </el-radio-group>
-                </td>
-              </tr>
-              <tr height="70">
-                <td align="right">&nbsp;手机 &nbsp;</td>
-                <td><input v-model="queryParams.phoneno" type="text" value="" name="mobile" class="l_tel"/></td>
-              </tr>
-              <tr height="70">
-                <td align="right">
-                  <el-button @click="TranvCode" icon="el-icon-message" v-if="this.getCode">&nbsp;发送验证码 &nbsp;</el-button>
-                  <el-button v-else disabled="disabled">{{this.countTime}}S后重试</el-button></td>
-                <td>
-                  <input type="text" v-bind:disabled="diasabledInput" v-model="queryParams.vcode" value="" name="mobile" class="l_tel"/>
-                </td>
-              </tr>
-              <tr height="89">
-                <td>&nbsp;</td>
-                <td><input type="button" value="立即注册" class="log_btn" @click="registerUser"/></td>
-              </tr>
-            </table>
-          </el-form>
-        </div>
-      </div>
+    <div>
+     <el-row class="m_content">
+       <shopheader/>
+       <el-col>
+         <div class="m_left">
+           <h1>帮助中心</h1>
+           <el-col>
+             <el-menu>
+               <el-menu-item index="1">
+                 <i class="el-icon-coin"></i>
+                 <span>新手入门</span>
+               </el-menu-item>
+               <el-menu-item index="2">
+                 <i class="el-icon-s-custom"></i>
+                 <span>积分计划</span>
+               </el-menu-item>
+               <el-menu-item index="3">
+                 <i class="el-icon-document"></i>
+                 <span>账户管理</span>
+               </el-menu-item>
+               <el-menu-item index="4">
+                 <i class="el-icon-user"></i>
+                 <span>售后服务</span>
+               </el-menu-item>
+             </el-menu>
+           </el-col>
+         </div>
+         <div style="overflow-y:scroll; height: 600px">
+           <div class="row">
+             <div class="col-xs-offset-2 col-xs-8">
+               <div class="page-header"><h1>帮助中心</h1></div>
+             </div>
+           </div>
+           <div class="m_right" style="top: 100px;margin: 25px;text-align: left">
+             <div v-if="course">
+                <newcourse/>
+             </div>
+<!--             <div v-if="course">-->
+<!--                <newcourse/>-->
+<!--             </div>-->
+<!--             <div v-if="course">-->
+<!--                <newcourse/>-->
+<!--             </div>-->
+<!--             <div v-if="course">-->
+<!--                <newcourse/>-->
+<!--             </div>-->
+           </div>
+         </div>
+       </el-col>
+     </el-row>
+      <shopfooter/>
     </div>
-    <!--End Login End-->
-    <!--Begin Footer Begin-->
-    <div class="btmbg">
-      <div class="btm">
-        备案/许可证编号：蜀ICP备12009302号-1-www.dingguagua.com Copyright © 2015-2018 商城网 All Rights Reserved. 复制必究 , Technical
-        Support: Dgg Group <br/>
-        <img :src="url+'b_1.gif'" width="98" height="33"/><img :src="url+'b_2.gif'"  width="98" height="33"/><img
-        :src="url+'b_3.gif'" width="98" height="33"/><img :src="url+'b_4.gif'"   width="98" height="33"/><img
-        :src="url+'b_5.gif'" width="98" height="33"/><img :src="url+'b_6.gif'"   width="98" height="33"/>
-      </div>
-    </div>
-    <!--End Footer End -->
-  </div>
-
 </template>
 
 <script>
-  import {reguser,TranVcode} from "@/api/product/register"
+  import shopfooter from "./shopfooter";
+  import shopheader from "./shopheader";
+  import newcourse from "./centerdetail/newcourse";
   export default {
-    name: "register",
-    data() {
+        name: "shopcenter",
+    data () {
       return {
-        diasabledInput:true,
-
-        getCode:true,
-        countTime:0,
-        url: "http://127.0.0.1:89/productimg/",
-        queryParams: {
-          userName:undefined,
-          phoneno:undefined,
-          password:undefined,
-          password1:undefined,
-          vcode:undefined,
-          sex:undefined
-        },
-        query:{
-          type:1,
-          telephone:undefined,
-          vcode:undefined
-        },
-
-        rules: {
-          userName: [
-            { required: true, message: '账号不能为空', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' }
-          ],
-          phoneno: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' }
-          ],
-          password1: [
-            { required: true, message: '请再次输入密码', trigger: 'blur' }
-          ]
-        }
+        course:true
       }
     },
     methods:{
-      index(){
-        this.$router.push({path:"/index"});
-      },
-      login(){
-        this.$router.push({path:"/login"});
-      },
-      register(){
-        this.$router.push({path:"/register"});
-      },
-      registerUser(){
-        if(this.queryParams.userName==undefined||this.queryParams.userName==""){
-          this.$message("用户名不能为空");
-          return false;
-        }
-        if(this.queryParams.password==undefined||this.queryParams.password==""){
-          this.$message('密码不能为空');
-          return false;
-        }
-        if(this.queryParams.phoneno==undefined||this.queryParams.phoneno==""){
-          this.$message('手机号不能为空');
-          return false;
-        }
-        if(this.queryParams.password1==undefined||this.queryParams.password1==""){
-          this.$message('请再次输入密码');
-          return false;
-        }
-        if(this.queryParams.password!=this.queryParams.password1){
-          this.$message('两次输入密码不正确');
-          return false;
-        }
-          reguser(this.queryParams).then(response =>{
-            if(response.data.retCode=="666"){
-              alert(response.data.MsgCode);
-              this.$router.push({path:"/login"});
-            }else if(response.data.retCode=="555"){
-              alert(response.data.MsgCode)
-            }else if(response.data.retCode=="556") {
-              alert(response.data.MsgCode)
-            }else if(response.data.retCode=="777"){
-              alert(response.data.MsgCode)
-            }else if (response.data.retCode=="557"){
-              alert(response.data.MsgCode)
-            }else{
-              alert(response.data.MsgCode)
-            }
-          })
-
-
-      },
-      TranvCode(){
-
-        this.query.telephone=this.queryParams.phoneno;
-        TranVcode(this.query).then(response =>{
-            if(response.data.retCode=="400"){
-              alert(response.data.MsgCode)
-            }else{
-              alert("发送验证码成功")
-              this.diasabledInput=false;
-              this.countTime=61;
-              this.getCode=false;
-              let that = this;
-              that.countTime--;
-              let timer = setInterval(function () {
-                if (that.countTime>1){
-                  that.countTime--
-                }else{
-                  clearInterval(timer);
-                  that.getCode = true;
-                  that.diasabledInput=true;
-                }
-              },1000)
-            }
-        })
-      }
+    },
+    components:{
+      shopfooter,
+      shopheader,
+      newcourse
     }
-  };
+  }
 </script>
-<style>
 
-  /* CSS Document */
+<style scoped>
   body {
     margin: 0;
     padding: 0;
@@ -583,7 +462,7 @@
   }
 
   ul.cars li .name {
-    width: 189px;
+    width: 180px;
     height: 40px;
     line-height: 20px;
     overflow: hidden;
@@ -603,7 +482,7 @@
   }
 
   ul.cars li .price {
-    width: 189px;
+    width: 180px;
     height: 20px;
     line-height: 20px;
     overflow: hidden;
@@ -665,7 +544,7 @@
     color: #3e3e3e;
     font-size: 16px;
     position: relative;
-    z-index: 890;
+    z-index: 800;
   }
 
   ul.menu_r {
@@ -860,7 +739,7 @@
     line-height: 40px;
     background-color: #FFF;
     color: #ff4e00;
-    z-index: 890px;
+    z-index: 800px;
   }
 
   .leftNav .zj {
@@ -885,7 +764,7 @@
   }
 
   .leftNav .zj .zj_l_c {
-    width: 289px;
+    width: 280px;
     height: 108px;
     line-height: 25px;
     overflow: hidden;
@@ -1034,7 +913,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=89)
+    *filter: alpha(opacity=80)
   }
 
   .banner .slide_info_card .slide_info_card_text {
@@ -1083,7 +962,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 89px;
+    margin-top: 80px;
   }
 
   .banner .op_btns .op_prev {
@@ -1149,7 +1028,7 @@
   }
   .banner .a_bigImg{ position:absolute; left:0px; top:0px; display:none; width:850px; height:430px; overflow:hidden; }
   .banner .a_bigImg .name{
-    width:850px; height:89px; line-height:89px; overflow:hidden; background:url(http://127.0.0.1:89/productimg/b_name.png) repeat-x center top; color:#333333; font-size:20px; text-align:center; position:absolute; left:0; bottom:40px;
+    width:850px; height:80px; line-height:80px; overflow:hidden; background:url(http://127.0.0.1:89/productimg/b_name.png) repeat-x center top; color:#333333; font-size:20px; text-align:center; position:absolute; left:0; bottom:40px;
   }
   .banner .ul_change_a2{ position:absolute; left:10px; bottom:15px; overflow:hidden; text-align:center; }
   .banner .ul_change_a2 li{
@@ -1338,7 +1217,7 @@
   }
 
   .c_btn {
-    width: 89px;
+    width: 80px;
     height: 26px;
     line-height: 26px \9;
     background-color: #ff4e00;
@@ -1471,7 +1350,7 @@
   }
 
   .hot_pro .featureUL {
-    width: 2890px;
+    width: 2800px;
     height: 375px;
     overflow: hidden;
     float: left;
@@ -2564,7 +2443,7 @@
   }
 
   .like .featureUL {
-    width: 2890px;
+    width: 2800px;
     height: 375px;
     overflow: hidden;
     float: left;
@@ -2781,20 +2660,6 @@
     height: 38px;
     line-height: 38px \9;
     overflow: hidden;
-    background: url(http://127.0.0.1:89/productimg/i_tel.png) no-repeat 285px center;
-    background-color: #FFF;
-    color: #888888;
-    font-size: 14px;
-    font-family: "Microsoft YaHei";
-    padding: 0 40px 0 10px;
-    border: 1px solid #cccccc;
-  }
-  .l_tel1 {
-    width: 70px;
-    height: 38px;
-    line-height: 38px \9;
-    overflow: hidden;
-    float:left;
     background: url(http://127.0.0.1:89/productimg/i_tel.png) no-repeat 285px center;
     background-color: #FFF;
     color: #888888;
@@ -3020,7 +2885,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=89)
+    *filter: alpha(opacity=80)
   }
 
   .nban .slide_info_card .slide_info_card_text {
@@ -3069,7 +2934,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 89px;
+    margin-top: 80px;
   }
 
   .nban .op_btns .op_prev {
@@ -4309,7 +4174,7 @@
   }
 
   .notice_c {
-    width: 489px;
+    width: 480px;
     overflow: hidden;
     margin-top: 10px;
   }
@@ -4423,7 +4288,7 @@
     left: 0;
     z-index: 1;
     opacity: .8;
-    *filter: alpha(opacity=89)
+    *filter: alpha(opacity=80)
   }
 
   .n_ban .slide_info_card .slide_info_card_text {
@@ -4460,7 +4325,7 @@
   /* op_btns */
   .n_ban .op_btns {
     width: 1200px;
-    margin-top: -689px;
+    margin-top: -680px;
     position: relative;
     z-index: 3;
   }
@@ -4472,7 +4337,7 @@
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    margin-top: 89px;
+    margin-top: 80px;
   }
 
   .n_ban .op_btns .op_prev {
@@ -4905,7 +4770,7 @@
   }
 
   .lim_price .ch_a {
-    width: 89px;
+    width: 80px;
     height: 40px;
     line-height: 40px;
     overflow: hidden;
@@ -5067,7 +4932,7 @@
   }
 
   .m_content {
-    width: 1210px;
+    width: 1256px;
     overflow: hidden;
     margin-top: 20px;
   }
@@ -5313,7 +5178,7 @@
     padding: 4px 4px 4px 4px;
     z-index: 1;
     display: none;
-    width: 189px;
+    width: 180px;
   }
 
   .order_tab .jslct_hover dl {

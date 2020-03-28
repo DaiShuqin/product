@@ -7,9 +7,12 @@
      <div class="content">
        <div id="tsShopContainer">
          <div id="tsImgS">
-           <a href="${ctx}/files/${product.fileName}" title="Images" class="MagicZoom" id="MagicZoom">
+<!--           <vue-viewer style="display:inline-block;width: 390px;height: 390px" width="390" height="390">-->
+<!--             <img :src="imgurl+goods.filename" width="390" height="390"/>-->
+<!--           </vue-viewer>-->
+           <viewer>
              <img :src="imgurl+goods.filename" width="390" height="390"/>
-           </a>
+           </viewer>
          </div>
        </div>
        <div class="pro_des">
@@ -56,10 +59,10 @@
          <br>
          <div class="des_join">
            <div class="j_nums">
-             <el-input-number size="small"  controls-position="right" v-model="num" @change="" :min="0" :max="1000"></el-input-number>
+             <el-input-number size="small" controls-position="right" v-model="shopCart.number" :min="goods.stock-(goods.stock-1)" :max="goods.stock" @change=""></el-input-number>
            </div>
            <span class="fl">
-                     <img :src="imgurl+'j_car.png'" onclick="addCart();"/>
+                     <img :src="imgurl+'j_car.png'" @click="addCart"/>
                 </span>
          </div>
        </div>
@@ -97,7 +100,7 @@
                </tr>
              </table>
              <p align="center">
-               <img :src="imgurl+goods.filename" width="185" height="155">
+                 <img v-for="item in goods.picInfos" :key="item" :src="imgurl+item.picUrl" width="185" height="155">
              </p>
            </div>
          </div>
@@ -109,21 +112,47 @@
 
 <script>
   import {goodsBean} from "@/api/product/index";
+  import {addCar} from "../../../api/product/cart";
 
   export default {
         name: "goodsdeatil",
       data(){
           return{
             imgurl:'http://127.0.0.1:89/productimg/',
-            num:1
+            num:1,
+            shopCart:{
+              unitPrice:0,
+              totalPrice:0,
+              goodsId:0,
+              number:1,
+              max:0
+            }
           }
       },
       props:['goods'],
-      methods:{
-          itms(){
-            debugger;
+    created() {
+    },
+    methods:{
+        addCart(){
+          debugger;
+          this.shopCart.goodsId=this.goods.id;
+          // alert( this.shopCart.goodsId)
+          this.shopCart.unitPrice=this.goods.price;
+          this.shopCart.totalPrice=this.shopCart.unitPrice*this.shopCart.number;
+          addCar(this.shopCart).then(response=>{
+            if(response.data.retCode=='1000'){
+              this.$message({
+                message: '加入购物车成功！',
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                message: '有误！',
+              });
+            }
+          })
 
-          }
+        }
       }
   }
 </script>

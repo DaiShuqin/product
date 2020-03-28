@@ -13,3 +13,9 @@ export function goodsBean(goodsId) {
     method: 'post',
   })
 }
+export function slideshows() {
+  return request({
+    url: '/slideshow/list',
+    method: 'post',
+  })
+}

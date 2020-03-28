@@ -7,3 +7,15 @@ export function login(query) {
     params:query
   })
 }
+export function islogin() {
+  return request({
+    url:'/login/header',
+    method:'post'
+  })
+}
+export function logoutr() {
+  return request({
+    url:'/login/logout',
+    method:'post'
+  })
+}

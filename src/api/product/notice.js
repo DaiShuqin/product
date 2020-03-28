@@ -7,3 +7,16 @@ export function noticelist(query) {
     params:query
   })
 }
+export function noticelistp(query) {
+  return request({
+    url:'/notice/listp',
+    method:'post',
+    params:query
+  })
+}
+export function noticedetail(id) {
+  return request({
+    url:'/notice/detail/'+id,
+    method:'post'
+  })
+}

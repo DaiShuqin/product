@@ -2,12 +2,12 @@
   <div>
     <el-container>
       <el-header>
-        <shopheader/>
+        <shopheader @goodsd="getgoods" @indexsy="sy"/>
       </el-header>
-      <el-main>
-        <shopmain/>
+      <el-main class="m">
+        <shopmain  ref="smain"/>
       </el-main>
-      <el-footer class="footer">
+      <el-footer>
         <shopfooter/>
       </el-footer>
     </el-container>
@@ -25,6 +25,12 @@
       }
     },
     methods:{
+      getgoods(e){
+        this.$refs.smain.goodsDe(e);
+      },
+      sy(){
+        this.$refs.smain.index();
+      }
     },
       components:{
         shopfooter,
@@ -36,8 +42,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .footer{
-    z-index: -1;
+  .m{
+    z-index: 999;
   }
   .el-carousel__item h3 {
     color: #475669;

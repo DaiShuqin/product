@@ -32,8 +32,8 @@
 
             </table>
 
-              <a href="#">忘记密码</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">忘记用户名</a>
+              <a @click="retrievePwd">忘记密码</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a @click="retrievename">忘记用户名</a>
           </el-form>
         </div>
       </div>
@@ -72,6 +72,11 @@
         }
       }
     },
+    watch: {
+      '$route' (to, from) {
+        this.$router.go(0);
+      }
+    },
     methods:{
       index(){
         this.$router.push({path:"/index"});
@@ -82,7 +87,14 @@
       register(){
         this.$router.push({path:"/register"});
       },
+      retrievename(){
+        this.$router.push({path:"/RetrieveName"});
+      },
+      retrievePwd(){
+        this.$router.push({path:"/RetrievePwd"});
+      },
       loginuser() {
+
         this.queryParams.userName = this.queryParams.mm;
         this.queryParams.phoneno = this.queryParams.mm;
         if(this.queryParams.userName==undefined||this.queryParams.userName==""){
@@ -95,8 +107,8 @@
         }
         login(this.queryParams).then(response => {
               if (response.data.retCode=="1000") {
-                alert(response.data.retCode)
-                this.$router.push({path: "/index"})
+                alert(response.data.retMsg)
+                this.$router.push({path: "/index"});
               } else {
                 alert(response.data.retMsg)
               }
